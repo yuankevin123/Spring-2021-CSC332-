@@ -1,0 +1,41 @@
+In this program, we are utilizing fork() to create new processes. First up, we check to see if fork 
+returns the value 0. If it does, then we have successfully created the child process and thus control 
+is given to them and the process id is returned to the parent process. Else, we return with error 
+(-1) if we unsuccessfully create a child process OR if the value is greater than 0 then we return 
+to the parent process such that the value contains the process ID of the newly created child process.
+
+And so in our program, if the first child process (Q) is created then the new value of a = a + b and 
+we print the results as well as the process ids. In addition, we create a new child process (R) hence 
+the parent process of it will be Q. Going back, if the value returns us back to the parent process, 
+the value of b changes such that b = a + b - 5 and we print the results. 
+
+Continuing on from the forking of child process R, if it was successfully created then the value of 
+a changes where a = a * b + 20 and results are printed. If it did not successfully work, then the 
+value of b changes such that b = b + 15 and results are printed. 
+
+We know that with forking, the parent process and child process will run concurrently so the output 
+may change depending on whether the parent process or child process is given control first. 
+
+After running my program multiple times, I’ve noticed that my order of execution has remained 
+consistent throughout with the process IDs being the only changes. Others may have different 
+experiences depending on their environment. 
+
+Explaining my results, we first have the initials values a=10, b=25, pid=20129, and ppid=20979. For 
+the first execution step, the value returned when utilizing fork() was greater than 0, we return 
+control to the parent process of Q where we perform b=a+b-5 such that the new values are a=10, b=30, 
+pid=21029, and ppid=20979. We then execute the child process Q now that we have finished the 
+parent process. In this part, we use a=a+b such that a=35, b=25, pid=21030, and ppid=1. We notice 
+that the value of b is the initial value we started with and that is because changes in one process 
+does not affect the other due to them being different and cause they run simultaneously. In addition, 
+our parent process id returned 1 because its parent process already terminated. Our third execution 
+happens when in the process of creating child process R, we return a value greater than 0 so we 
+return the parent process of R, hence we use b=b+15. The new values are then a=35, b=40, pid=21030, 
+and ppid=1. Looking at our value a, we notice that it is the value for when Q was created. This is 
+because R uses Q as its parent process (where we are forking from). Once again, our ppid is 1 because 
+the initial parent id we started with has already terminated before its child process can finish 
+executing. For our final execution, we perform a=a*b+20 to signify that the value returned is 0 and 
+R has been successfully created. Our values then are a=(35*25)+20=895, b=25, pid=21030, and ppid=1. 
+The same reasoning from the previous step can be applied here. 
+
+To deal with the issue of the parent process finishing first, we will have to utilize the wait() or 
+waitpid() which will make sure the parent process waits for all child processes to finish executing. (A test run had successfully confirmed that).

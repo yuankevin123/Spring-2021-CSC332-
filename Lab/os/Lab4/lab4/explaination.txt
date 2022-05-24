@@ -1,0 +1,39 @@
+----Command Interpreter----
+
+For this part, we are to implement a simple command interpreter with exec() system calls. In my 
+program, we first use the function fgets() to take in the user input. Since, fgets() adds a new 
+line to the string/input, we use the function strcspn() to compare our input against '\n' and if
+it matches we set that to 0 to remove it. Next, since some commands utilize multiple parts, we
+use strtok() to split our string into multiple strings with space as the delimiter. Now, that
+the command(string) has been split, we can append these strings into our array using the while 
+loop until we reach the end. If you see, we set ptr = strtok(NULL, " ") after appending a string to 
+our array because after reading the first argument, we need to tell the function to continue
+reading from where it last read. After, the while loop we set the last index of the array to NULL
+so we know when to return our results. Finally, we can begin our child process through forking. If
+it has successfully been forked, we can execute the command through execvp(). However, since "quit"
+is the input to quit the program, we make sure that an error won't arise from trying to execute 
+by bypassing it via an if statement. If no issues, then we return the results. If the fork fails,
+we terminate the program. Else, if we go the parent process instead we wait for the child process
+to finish through waitpid(). Finally, we return if the program succeeded. Note, that all this
+occurs in a while loop, so it will continue until the user enters "quit."
+
+
+----Grade Calculator----
+
+For this part, we are to implement an average grade calculator. In my program, we first initialize
+the homework and chapters to 2 and 5 respectively, but there are multiple ways to do so. This means
+there will be 5 managers and 10 workers. To begin, we open our files containing our grades in read
+mode and our file to store the averages into in write mode using fopen(). Then we utilize a for loop 
+to read the values in our grades file into the array which will contains the grades for 10 students
+using fscanf(). Now, that we have our grades, we can start creating x managers by forking and if
+successful, we fork y workers using a for loop as well. Therefore, each manager should have 2 
+workers underneath them. If successfully forked the workers, we calculate the total grade for each
+chapter via the for loop for each worker to calculate. Then we print the average of the grade by
+dividing it by 10 and printing it as a float so we can get a better estimate as well as write the 
+results to our average file and return. If we fail to successfully fork a worker, we terminate the 
+program and print an error. If the parent finishes first then we wait using the waitpid() function 
+and return. If we fail to successfully fork a manager, then we also terminate the program and print 
+an error with perror(). If parent finishes first, then we wait for the child process using waitpid(). 
+Note that with each time we wait for the manager and worker to finish we print out which one does 
+so as to keep a log of execution. In other words, we see which average the worker calculated as well 
+as the manager they are underneath. Finally, we close both our files using fclose() and return.

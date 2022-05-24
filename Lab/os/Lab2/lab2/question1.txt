@@ -1,0 +1,8 @@
+In this program, our objective is to create two child processes from the parent process and ensure 
+the parent process terminates once the child process terminates. So, in our first step, we call a 
+fork to see if we create the first child process. If the value is equal to 0, then we successfully 
+created the first child and we print out their pid using getpid(), else if the value is greater than 
+0 then we go to the parent process and create a second child process if the value is correct and 
+print its pid. If not, then we utilize wait(0) to ensure the parent process does not terminate until 
+the child processes do. Once they have finished, we can then terminate and print out that the child 
+processes are done.
